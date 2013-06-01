@@ -11,11 +11,19 @@ $app = new Silex\Application();
 $app['debug'] = true;
 
 // default route
-$app->get('/', function (Silex\Application $app) {
+$app->get('/', function(Silex\Application $app) {
     return $app->redirect('http://lukekorth.com/blog/category/pebble/');
 });
 
-$app->post('/xmlrpc.php', function (Silex\Application $app, Symfony\Component\HttpFoundation\Request $request) {
+$app->post('/register', function(Silex\Application $app, Symfony\Component\HttpFoundation\Request $request) {
+
+});
+
+$app->post('/send', function(Silex\Application $app, Symfony\Component\HttpFoundation\Request $request) {
+
+});
+
+$app->post('/xmlrpc.php', function(Silex\Application $app, Symfony\Component\HttpFoundation\Request $request) {
 	error_reporting(-1);
 	ini_set('display_errors',1);
 	$request_body = file_get_contents('php://input');
