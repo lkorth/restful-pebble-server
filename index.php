@@ -2,28 +2,92 @@
 
 require_once('vendor/autoload.php');
 
-class R extends RedBean_Facade {}
-R::setup('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
-R::$writer->setUseCache(true);
-//R::freeze();
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-$app = new Silex\Application();
+function initDB() {
+    R::setup('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
+    R::$writer->setUseCache(true);
+    //R::freeze();
+}
+
+$app = new Application();
 $app['debug'] = true;
 
 // default route
-$app->get('/', function(Silex\Application $app) {
+$app->get('/', function(Application $app) {
     return $app->redirect('http://lukekorth.com/blog/category/pebble/');
 });
 
-$app->post('/register', function(Silex\Application $app, Symfony\Component\HttpFoundation\Request $request) {
+$app->get('/watchfaces', function(Application $app) {
+    $html = <<<EOD
+<!doctype html>
+<!-- design from http://pebble-static.s3.amazonaws.com/watchfaces/index.html -->
+<html>
+<head>
+    <link rel="stylesheet" href="/assets/stylesheet.css" type="text/css" charset="utf-8" />
+</head>
+<body>
+<div style="width: 320px; margin: 0 auto;">
+	<h1 id="watchfaces">Watchfaces</h1>
+	<h3 id="updated">Updated 6/2</h3>
+	<br>
+	<ul id="watchface-list">
+	    <a href="http://builds.cloudpebble.net/c/a/ca37c0d2ca8f4fd9ad53c23616c06422/watchface.pbw">
+			<div class="cell">
+				<li style="background: url('/assets/weather-watch.jpg') no-repeat center left">Weather Watch<br>by: Katharine</li>
+			</div>
+		</a>
+
+		<a href="http://builds.cloudpebble.net/b/5/b59acb1e6fe14d678d420dc02b325f37/watchface.pbw">
+			<div class="cell">
+				<li style="background: url('/assets/roboto-weather.jpg') no-repeat center left">Roboto Weather<br>by: Zone-MR</li>
+			</div>
+		</a>
+
+		<a href="http://www.mypebblefaces.com/download.php?fID=3735&version=1.7&uID=3263&link=1">
+			<div class="cell">
+				<li style="background: url('/assets/futura-weather.jpg') no-repeat center left">Futura<br>by: Niknam</li>
+			</div>
+		</a>
+		<a href="http://www.mypebblefaces.com/download.php?fID=3777&version=1.7&uID=3263&link=2&sub=1">
+			<div class="cell">
+				<li style="background: url('/assets/futura-weather.jpg') no-repeat center left">Futura (no vibration alert)<br>by: Niknam</li>
+			</div>
+		</a>
+	</ul>
+</div>
+</body>
+</html>
+
+EOD;
+
+    return new Response($html);
+});
+
+$app->post('/register', function(Silex\Application $app, Request $request) {
+    initDB();
+
+    $userId = $request->request->get('userId');
+    $userToken = $request->request->get('userToken');
+    $gcmToken = $request->request->get('gcmToken');
+
+    if(empty($userId) || empty($userToken) || empty($gcmToken))
+        $app->abort(400);
+    else {
+        $user = R::find('user', ' userid = :userid ', array(':userid' => $userId));
+    }
+});
+
+$app->post('/send', function(Application $app, Symfony\Component\HttpFoundation\Request $request) {
+    initDB();
 
 });
 
-$app->post('/send', function(Silex\Application $app, Symfony\Component\HttpFoundation\Request $request) {
+$app->post('/xmlrpc.php', function(Application $app, Request $request) {
+    initDB();
 
-});
-
-$app->post('/xmlrpc.php', function(Silex\Application $app, Symfony\Component\HttpFoundation\Request $request) {
 	error_reporting(-1);
 	ini_set('display_errors',1);
 	$request_body = file_get_contents('php://input');
