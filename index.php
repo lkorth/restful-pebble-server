@@ -19,7 +19,7 @@ $app = new Application();
 
 // default route
 $app->get('/', function(Application $app) {
-    return $app->redirect('http://lukekorth.com/blog/category/pebble/');
+    return $app->redirect('http://kathar.in/httpebble/');
 });
 
 $app->error(function (\Exception $e, $code) {
