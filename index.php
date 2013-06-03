@@ -191,10 +191,7 @@ $app->post('/xmlrpc.php', function(Application $app, Request $request) {
 	}
 });
 
-/** Copied from wordpress */
-
-function success($innerXML)
-{
+function success($innerXML) {
 	$xml =  <<<EOD
 <?xml version="1.0"?>
 <methodResponse>
@@ -208,20 +205,21 @@ function success($innerXML)
 </methodResponse>
 
 EOD;
-	output($xml);
+
+    return output($xml);
 }
 
-function output($xml){
-	$length = strlen($xml);
-	header('Connection: close');
-	header('Content-Length: '.$length);
-	header('Content-Type: text/xml');
-	header('Date: '.date('r'));
-	echo $xml;
-	exit;
+function output($xml) {
+    $response = new Response($xml);
+    $response->headers->set('Connection', 'close');
+    $response->headers->set('Content-Length', strlen($xml));
+    $response->headers->set('Content-Type', 'text/xml');
+    $response->headers->set('Date', date('r'));
+
+    return $response;
 }
 
-function failure($status){
+function failure($status) {
 $xml= <<<EOD
 <?xml version="1.0"?>
 <methodResponse>
@@ -242,9 +240,8 @@ $xml= <<<EOD
 </methodResponse>
 
 EOD;
-output($xml);
-}
 
+    return output($xml);
 }
 
 $app->run();
