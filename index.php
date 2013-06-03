@@ -140,9 +140,7 @@ $app->post('/xmlrpc.php', function(Application $app, Request $request) {
 	$request_body = file_get_contents('php://input');
 	$xml = simplexml_load_string($request_body);
 
-	switch($xml->methodName)
-	{
-
+	switch($xml->methodName) {
 		//wordpress blog verification
 		case 'mt.supportedMethods':
 			success('metaWeblog.getRecentPosts');
@@ -153,7 +151,6 @@ $app->post('/xmlrpc.php', function(Application $app, Request $request) {
 			//this also makes sure that the channel is never triggered
 			success('<array><data></data></array>');
 			break;
-
 		case 'metaWeblog.newPost':
 			//@see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
 			$obj = new stdClass;
@@ -163,10 +160,8 @@ $app->post('/xmlrpc.php', function(Application $app, Request $request) {
 
 			//@see content in the wordpress docs
 			$content = $xml->params->param[3]->value->struct->member;
-			foreach($content as $data)
-			{
-				switch((string)$data->name)
-				{
+			foreach($content as $data) {
+				switch((string)$data->name) {
 					//we use the tags field for providing webhook URL
 					case 'mt_keywords':
 						$url = $data->xpath('value/array/data/value/string');
