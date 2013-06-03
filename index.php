@@ -78,8 +78,10 @@ $app->post('/register', function(Application $app, Request $request) {
     else {
         $user = DB::findOne('user', ' userid = :userid ', array(':userid' => $data['userId']));
 
-        if($user == null)
+        if($user == null) {
             $user = DB::dispense('user');
+            $user->notifications = 0;
+        }
 
         $user->userid = $data['userId'];
         $user->usertoken = $data['userToken'];
@@ -126,6 +128,9 @@ $app->post('/send', function(Application $app, Request $request) {
             $app->abort(500);
         }
 
+        $user->notifications = $user->notifications + 1;
+        DB::store($user);
+        
         return new Response();
     } else {
         $app->abort(400);
