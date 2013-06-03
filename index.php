@@ -22,6 +22,10 @@ $app->get('/', function(Application $app) {
     return $app->redirect('http://lukekorth.com/blog/category/pebble/');
 });
 
+$app->error(function (\Exception $e, $code) {
+    return new Response();
+});
+
 $app->get('/watchfaces', function(Application $app) {
     $html = <<<EOD
 <!doctype html>
@@ -130,7 +134,7 @@ $app->post('/send', function(Application $app, Request $request) {
 
         $user->notifications = $user->notifications + 1;
         DB::store($user);
-        
+
         return new Response();
     } else {
         $app->abort(400);
