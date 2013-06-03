@@ -182,28 +182,12 @@ $app->post('/xmlrpc.php', function(Application $app, Request $request) {
 				}
 			}
 
-			//Make the webrequest
-			//Only if we have a valid url
-			if(valid_url($url,true))
-			{
-				// Load Requests Library
-				include('requests/Requests.php');
-				Requests::register_autoloader();
-
-				$headers = array('Content-Type' => 'application/json');
 				$response = Requests::post($url, $headers, json_encode($obj));
 
 				if($response->success)
 					success('<string>'.$response->status_code.'</string>');
 				else
 					failure($response->status_code);
-			}
-			else
-			{
-				//since the url was invalid, we return 400 (Bad Request)
-				failure(400);
-			}
-			
 	}
 });
 
@@ -261,29 +245,6 @@ EOD;
 output($xml);
 }
 
-/** Used from drupal */
-function valid_url($url, $absolute = FALSE) {
-  if ($absolute) {
-    return (bool) preg_match("
-      /^                                                      # Start at the beginning of the text
-      (?:https?):\/\/                                # Look for ftp, http, https or feed schemes
-      (?:                                                     # Userinfo (optional) which is typically
-        (?:(?:[\w\.\-\+!$&'\(\)*\+,;=]|%[0-9a-f]{2})+:)*      # a username or a username and password
-        (?:[\w\.\-\+%!$&'\(\)*\+,;=]|%[0-9a-f]{2})+@          # combination
-      )?
-      (?:
-        (?:[a-z0-9\-\.]|%[0-9a-f]{2})+                        # A domain name or a IPv4 address
-        |(?:\[(?:[0-9a-f]{0,4}:)*(?:[0-9a-f]{0,4})\])         # or a well formed IPv6 address
-      )
-      (?::[0-9]+)?                                            # Server port number (optional)
-      (?:[\/|\?]
-        (?:[\w#!:\.\?\+=&@$'~*,;\/\(\)\[\]\-]|%[0-9a-f]{2})   # The path and query (optional)
-      *)?
-    $/xi", $url);
-  }
-  else {
-    return (bool) preg_match("/^(?:[\w#!:\.\?\+=&@$'~*,;\/\(\)\[\]\-]|%[0-9a-f]{2})+$/i", $url);
-  }
 }
 
 $app->run();
