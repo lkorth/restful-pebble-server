@@ -68,17 +68,26 @@ EOD;
     return new Response($html);
 });
 
-$app->post('/register', function(Silex\Application $app, Request $request) {
+$app->post('/register', function(Application $app, Request $request) {
     initDB();
 
-    $userId = $request->request->get('userId');
-    $userToken = $request->request->get('userToken');
-    $gcmToken = $request->request->get('gcmToken');
+    $data = json_decode($request->request->get('data'), true);
 
-    if(empty($userId) || empty($userToken) || empty($gcmToken))
+    if(empty($data['userId']) || empty($data['userToken']) || empty($data['gcmId']))
         $app->abort(400);
     else {
-        $user = R::find('user', ' userid = :userid ', array(':userid' => $userId));
+        $user = DB::findOne('user', ' userid = :userid ', array(':userid' => $data['userId']));
+
+        if($user == null)
+            $user = DB::dispense('user');
+
+        $user->userid = $data['userId'];
+        $user->usertoken = $data['userToken'];
+        $user->gcmid = $data['gcmId'];
+
+        DB::store($user);
+
+        return new Response();
     }
 });
 
