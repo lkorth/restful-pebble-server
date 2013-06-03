@@ -1,14 +1,16 @@
 <?php
 
+require_once('../../config.php');
 require_once('vendor/autoload.php');
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+class DB extends RedBean_Facade{};
 function initDB() {
-    R::setup('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
-    R::$writer->setUseCache(true);
+    DB::setup('mysql:host=' . HTTPEBBLE_DB_HOST . ';dbname=' . HTTPEBBLE_DB_NAME, HTTPEBBLE_DB_USER, HTTPEBBLE_DB_PASSWORD);
+    DB::$writer->setUseCache(true);
     //R::freeze();
 }
 
