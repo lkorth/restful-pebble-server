@@ -11,7 +11,7 @@ class DB extends RedBean_Facade{};
 function initDB() {
     DB::setup('mysql:host=' . HTTPEBBLE_DB_HOST . ';dbname=' . HTTPEBBLE_DB_NAME, HTTPEBBLE_DB_USER, HTTPEBBLE_DB_PASSWORD);
     DB::$writer->setUseCache(true);
-    R::freeze();
+    DB::freeze();
 }
 
 $app = new Application();
