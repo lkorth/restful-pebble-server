@@ -91,9 +91,45 @@ $app->post('/register', function(Application $app, Request $request) {
     }
 });
 
-$app->post('/send', function(Application $app, Symfony\Component\HttpFoundation\Request $request) {
-    initDB();
+$app->post('/send', function(Application $app, Request $request) {
+    if($request->request->get('type') == 'notification') {
+        initDB();
 
+        $userId = $request->request->get('userId');
+
+        if(empty($userId))
+            $app->abort(400);
+
+        $user = DB::findOne('user', ' userid = :userid ', array(':userid' => $userId));
+
+        if($user == null)
+            $app->abort(404);
+
+        if($user->usertoken != $request->request->get('userToken'))
+            $app->abort(400);
+
+        $notification = array();
+        $notification['type'] = 'notification';
+        $notification['title'] = $request->request->get('title');
+        $notification['body'] = $request->request->get('body');
+
+        $sender = new PHP_GCM\Sender(HTTPEBBLE_GCM_KEY);
+        $message = new PHP_GCM\Message('', $notification);
+
+        try {
+            $result = $sender->send($message, $user->gcmid, 3);
+        } catch (\InvalidArgumentException $e) {
+            $app->abort(500);
+        } catch (PHP_GCM\InvalidRequestException $e) {
+            $app->abort($e->getHttpStatusCode());
+        } catch (\Exception $e) {
+            $app->abort(500);
+        }
+
+        return new Response();
+    } else {
+        $app->abort(400);
+    }
 });
 
 $app->post('/xmlrpc.php', function(Application $app, Request $request) {
