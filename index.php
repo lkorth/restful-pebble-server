@@ -18,8 +18,7 @@ $app = new Application();
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => __DIR__.'/log/dev.log',
 ));
-
-$app['debug'] = true;
+//$app['debug'] = true;
 
 // default route
 $app->get('/', function(Application $app) {
@@ -89,6 +88,7 @@ $app->post('/register', function(Application $app, Request $request) {
         if($user == null) {
             $user = DB::dispense('user');
             $user->notifications = 0;
+            $user->ifttt = 0;
         }
 
         $user->userid = $data['userId'];
@@ -145,24 +145,20 @@ $app->post('/send', function(Application $app, Request $request) {
     }
 });
 
-$app->post('/xmlrpc.php', function(Application $app, Request $request) {
+$app->post('/xmlrpc.php', function(Application $app) {
     initDB();
 
-	error_reporting(-1);
-	ini_set('display_errors',1);
-	$request_body = file_get_contents('php://input');
-	$xml = simplexml_load_string($request_body);
-
+	$xml = simplexml_load_string(file_get_contents('php://input'));
 	switch($xml->methodName) {
 		//wordpress blog verification
 		case 'mt.supportedMethods':
-			success('metaWeblog.getRecentPosts');
+			return success('metaWeblog.getRecentPosts');
 			break;
 		//first authentication request from ifttt
 		case 'metaWeblog.getRecentPosts':
 			//send a blank blog response
 			//this also makes sure that the channel is never triggered
-			success('<array><data></data></array>');
+			return success('<array><data></data></array>');
 			break;
 		case 'metaWeblog.newPost':
 			//@see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
@@ -195,12 +191,36 @@ $app->post('/xmlrpc.php', function(Application $app, Request $request) {
 				}
 			}
 
-				$response = Requests::post($url, $headers, json_encode($obj));
+            $user = DB::findOne('user', ' userid = :userid ', array(':userid' => $obj->user));
 
-				if($response->success)
-					success('<string>'.$response->status_code.'</string>');
-				else
-					failure($response->status_code);
+            if($user == null)
+                return failure(404);
+
+            if($user->usertoken != $obj->pass)
+                return failure(400);
+
+            $notification = array();
+            $notification['type'] = 'notification';
+            $notification['title'] = $obj->title;
+            $notification['body'] = $obj->description;
+
+            $sender = new PHP_GCM\Sender(HTTPEBBLE_GCM_KEY);
+            $message = new PHP_GCM\Message('', $notification);
+
+            try {
+                $result = $sender->send($message, $user->gcmid, 3);
+
+                $user->ifttt = $user->iftt + 1;
+                DB::store($user);
+
+                return success('<string>200</string>');
+            } catch (\InvalidArgumentException $e) {
+                return failure(500);
+            } catch (PHP_GCM\InvalidRequestException $e) {
+                return failure($e->getHttpStatusCode());
+            } catch (\Exception $e) {
+                return failure(500);
+            }
 	}
 });
 
