@@ -1,6 +1,7 @@
 {
     "require": {
         "silex/silex": "1.0.*@dev",
+        "monolog/monolog": ">=1.0.0",
         "gabordemooij/redbean": "dev-master",
         "php-gcm/php-gcm": "dev-master"
     }

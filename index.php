@@ -15,7 +15,11 @@ function initDB() {
 }
 
 $app = new Application();
-//$app['debug'] = true;
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => __DIR__.'/log/dev.log',
+));
+
+$app['debug'] = true;
 
 // default route
 $app->get('/', function(Application $app) {
