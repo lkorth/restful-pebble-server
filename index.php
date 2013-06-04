@@ -32,7 +32,7 @@ $app->get('/watchfaces', function(Application $app) {
 <!-- design from http://pebble-static.s3.amazonaws.com/watchfaces/index.html -->
 <html>
 <head>
-    <link rel="stylesheet" href="/assets/stylesheet.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="/pebble/assets/stylesheet.css" type="text/css" charset="utf-8" />
 </head>
 <body>
 <div style="width: 320px; margin: 0 auto;">
@@ -42,24 +42,24 @@ $app->get('/watchfaces', function(Application $app) {
 	<ul id="watchface-list">
 	    <a href="http://builds.cloudpebble.net/c/a/ca37c0d2ca8f4fd9ad53c23616c06422/watchface.pbw">
 			<div class="cell">
-				<li style="background: url('/assets/weather-watch.jpg') no-repeat center left">Weather Watch<br>by: Katharine</li>
+				<li style="background: url('/pebble/assets/weather-watch.jpg') no-repeat center left">Weather Watch<br>by: Katharine</li>
 			</div>
 		</a>
 
 		<a href="http://builds.cloudpebble.net/b/5/b59acb1e6fe14d678d420dc02b325f37/watchface.pbw">
 			<div class="cell">
-				<li style="background: url('/assets/roboto-weather.jpg') no-repeat center left">Roboto Weather<br>by: Zone-MR</li>
+				<li style="background: url('/pebble/assets/roboto-weather.jpg') no-repeat center left">Roboto Weather<br>by: Zone-MR</li>
 			</div>
 		</a>
 
 		<a href="http://www.mypebblefaces.com/download.php?fID=3735&version=1.7&uID=3263&link=1">
 			<div class="cell">
-				<li style="background: url('/assets/futura-weather.jpg') no-repeat center left">Futura<br>by: Niknam</li>
+				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura<br>by: Niknam</li>
 			</div>
 		</a>
 		<a href="http://www.mypebblefaces.com/download.php?fID=3777&version=1.7&uID=3263&link=2&sub=1">
 			<div class="cell">
-				<li style="background: url('/assets/futura-weather.jpg') no-repeat center left">Futura (no vibration alert)<br>by: Niknam</li>
+				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura (no vibration alert)<br>by: Niknam</li>
 			</div>
 		</a>
 	</ul>
