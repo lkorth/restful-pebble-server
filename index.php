@@ -128,6 +128,9 @@ $app->post('/send', function(Application $app, Request $request) {
 
         try {
             $result = $sender->send($message, $user->gcmid, 3);
+            
+            $user->notifications = $user->notifications + 1;
+            DB::store($user);
         } catch (\InvalidArgumentException $e) {
             $app->abort(500);
         } catch (PHP_GCM\InvalidRequestException $e) {
@@ -135,9 +138,6 @@ $app->post('/send', function(Application $app, Request $request) {
         } catch (\Exception $e) {
             $app->abort(500);
         }
-
-        $user->notifications = $user->notifications + 1;
-        DB::store($user);
 
         return new Response();
     } else {
@@ -210,7 +210,7 @@ $app->post('/xmlrpc.php', function(Application $app) {
             try {
                 $result = $sender->send($message, $user->gcmid, 3);
 
-                $user->ifttt = $user->iftt + 1;
+                $user->ifttt = $user->ifttt + 1;
                 DB::store($user);
 
                 return success('<string>200</string>');
