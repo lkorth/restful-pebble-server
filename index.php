@@ -40,16 +40,16 @@ $app->get('/watchfaces', function(Application $app) {
 <body>
 <div style="width: 320px; margin: 0 auto;">
 	<h1 id="watchfaces">Watchfaces</h1>
-	<h3 id="updated">Updated 6/2</h3>
+	<h3 id="updated">Updated 6/16</h3>
 	<br>
 	<ul id="watchface-list">
-	    <a href="http://builds.cloudpebble.net/c/a/ca37c0d2ca8f4fd9ad53c23616c06422/watchface.pbw">
+	    <a href="http://builds.cloudpebble.net/d/9/d9f4525aa8124c4ba2f44ebfb14dafae/watchface.pbw">
 			<div class="cell">
 				<li style="background: url('/pebble/assets/weather-watch.jpg') no-repeat center left">Weather Watch<br>by: Katharine</li>
 			</div>
 		</a>
 
-		<a href="http://builds.cloudpebble.net/b/5/b59acb1e6fe14d678d420dc02b325f37/watchface.pbw">
+		<a href="http://builds.cloudpebble.net/7/b/7b45b3296eb3460eaf004e641b0e9071/watchface.pbw">
 			<div class="cell">
 				<li style="background: url('/pebble/assets/roboto-weather.jpg') no-repeat center left">Roboto Weather<br>by: Zone-MR</li>
 			</div>
