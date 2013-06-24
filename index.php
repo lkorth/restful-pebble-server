@@ -65,6 +65,12 @@ $app->get('/watchfaces', function(Application $app) {
 				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura (no vibration alert)<br>by: Niknam</li>
 			</div>
 		</a>
+
+		<a href="http://www.mypebblefaces.com/download.php?fID=3217&version=1.1.6&uID=1444&link=1">
+			<div class="cell">
+				<li style="background: url('/pebble/assets/pebsona4.png') no-repeat center left">Pebsona 4<br>by: Spencer Johnson</li>
+			</div>
+		</a>
 	</ul>
 </div>
 </body>
