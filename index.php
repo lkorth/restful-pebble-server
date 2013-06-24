@@ -49,18 +49,18 @@ $app->get('/watchfaces', function(Application $app) {
 			</div>
 		</a>
 
-		<a href="http://builds.cloudpebble.net/7/b/7b45b3296eb3460eaf004e641b0e9071/watchface.pbw">
+		<a href="http://builds.cloudpebble.net/9/5/9519a01531134e73b03cf1f33db58575/watchface.pbw">
 			<div class="cell">
 				<li style="background: url('/pebble/assets/roboto-weather.jpg') no-repeat center left">Roboto Weather<br>by: Zone-MR</li>
 			</div>
 		</a>
 
-		<a href="http://www.mypebblefaces.com/download.php?fID=3735&version=1.71&uID=3263&link=1">
+		<a href="http://www.mypebblefaces.com/download.php?fID=3735&version=1.72&uID=3263&link=1">
 			<div class="cell">
 				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura<br>by: Niknam</li>
 			</div>
 		</a>
-		<a href="http://www.mypebblefaces.com/download.php?fID=3777&version=1.71&uID=3263&sub=1&link=2">
+		<a href="http://www.mypebblefaces.com/download.php?fID=3777&version=1.72&uID=3263&link=2&sub=1">
 			<div class="cell">
 				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura (no vibration alert)<br>by: Niknam</li>
 			</div>
