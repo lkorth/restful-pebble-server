@@ -81,6 +81,111 @@ EOD;
     return new Response($html);
 });
 
+$app->get('/weather', function(Application $app, Request $request) {
+    /*
+    $payload = json_decode(file_get_contents('php://input'), true);
+    if(!$payload)
+        return $app->abort(400);
+
+    $lat = round($payload[1] / 10000, 3);
+    $long = round($payload[2] / 10000, 3);
+    $units = $payload[3];
+
+    $success = false;
+    $woeid = apc_fetch("$lat$long", $success);
+
+    if(!$success) {
+        $flickrResponse = get_data('http://api.flickr.com/services/rest/?method=flickr.places.findByLatLon&format=json&api_key=' . FLICKR_KEY . '&lat=' . $lat . '&lon=' . $long);
+        $flickrResponse = json_decode(substr($flickrResponse, 14, strlen($flickrResponse) - 15), true);
+        $woeid = $flickrResponse['places']['place'][0]['woeid'];
+
+        apc_store("$lat$long", $woeid);
+    }
+
+    $xml = simplexml_load_file('http://weather.yahooapis.com/forecastrss?w=' . $woeid . '&u=' . $units);
+    $xml->registerXPathNamespace('yweather', 'http://xml.weather.yahoo.com/ns/rss/1.0');
+    $condition = $xml->channel->item->xpath('yweather:condition');
+
+    $icons = array(
+        'clear-day' => 0,
+        'clear-night' => 1,
+        'rain' => 2,
+        'snow' => 3,
+        'sleet' => 4,
+        'wind' => 5,
+        'fog' => 6,
+        'cloudy' => 7,
+        'partly-cloudy-day' => 8,
+        'partly-cloudy-night' => 9
+    );
+
+    // yahoo code => watch face icon id // yahoo condition => watch face condition
+    $icons = array(
+        0 => //tornado
+        1 => //tropical storm
+        2 => //hurricane
+        3 => //severe thunderstorms
+        4 => //thunderstorms
+        5 => 4, //mixed rain and snow => sleet
+        6 => 4, //mixed rain and sleet => sleet
+        7 => 4, //mixed snow and sleet => sleet
+        8 => //freezing drizzle
+        9 => //drizzle
+        10 => //freezing rain
+        11 => 2, //showers => rain
+        12 => 2, //showers => rain
+        13 => 3, //snow flurries => snow
+        14 => //light snow showers
+        15 => //blowing snow
+        16 => 3, //snow => snow
+        17 => //hail
+        18 => 4, //sleet => sleet
+        19 => //dust
+        20 => 6, //foggy => fog
+        21 => //haze
+        22 => //smoky
+        23 => //blustery
+        24 => 5, //windy => wind
+        25 => //cold
+        26 => 8, //cloudy => partly-cloudy-day
+        27 => 9, //mostly cloudy (night) => partly-cloudy-night
+        28 => 8, //mostly cloudy (day) => partly-cloudy-day
+        29 => 9, //partly cloudy (night) => partly-cloudy-night
+        30 => 8, //partly cloudy (day) => partly-cloudy-day
+        31 => 1, //clear (night) => clear-night
+        32 => 0, //sunny => clear-day
+        33 => 1, //fair (night) => clear-night
+        34 => 0, //fair (day) => clear-day
+        35 => //mixed rain and hail
+        36 => //hot
+        37 => //isolated thunderstorms
+        38 => //scattered thunderstorms
+        39 => //scattered thunderstorms
+        40 => //scattered showers
+        41 => 3, //heavy snow => snow
+        42 => //scattered snow showers
+        43 => //heavy snow
+        44 => 8, //partly cloudy => partly-cloudy-day
+        45 => //thundershowers
+        46 => //snow showers
+        47 => //isolated thundershowers
+        3200 => 99 //not available
+    );
+
+    $data = array();
+
+    $data[1] = array('b', $icons[$condition[0]['code']]);
+    $data[2] = array('s', round($condition[0]['temp']));
+
+    $response = new Response();
+    $response->setContent($app->json($data));
+    $response->headers->set('Cache-Control', 'max-age=1680');
+    $response->headers->set('Content-Type', 'application/json');
+
+    return $response;
+    */
+});
+
 $app->post('/register', function(Application $app, Request $request) {
     initDB();
 
