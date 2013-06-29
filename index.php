@@ -22,7 +22,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 
 // default route
 $app->get('/', function(Application $app) {
-    return $app->redirect('http://kathar.in/httpebble/');
+    return $app->redirect('http://lukekorth.com/');
 });
 
 $app->error(function (\Exception $e, $code) {
