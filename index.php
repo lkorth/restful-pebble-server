@@ -81,8 +81,7 @@ EOD;
     return new Response($html);
 });
 
-$app->get('/weather', function(Application $app, Request $request) {
-    /*
+$app->post('/weather', function(Application $app) {
     $payload = json_decode(file_get_contents('php://input'), true);
     if(!$payload)
         return $app->abort(400);
@@ -106,48 +105,35 @@ $app->get('/weather', function(Application $app, Request $request) {
     $xml->registerXPathNamespace('yweather', 'http://xml.weather.yahoo.com/ns/rss/1.0');
     $condition = $xml->channel->item->xpath('yweather:condition');
 
-    $icons = array(
-        'clear-day' => 0,
-        'clear-night' => 1,
-        'rain' => 2,
-        'snow' => 3,
-        'sleet' => 4,
-        'wind' => 5,
-        'fog' => 6,
-        'cloudy' => 7,
-        'partly-cloudy-day' => 8,
-        'partly-cloudy-night' => 9
-    );
-
     // yahoo code => watch face icon id // yahoo condition => watch face condition
     $icons = array(
-        0 => //tornado
-        1 => //tropical storm
-        2 => //hurricane
-        3 => //severe thunderstorms
-        4 => //thunderstorms
-        5 => 4, //mixed rain and snow => sleet
-        6 => 4, //mixed rain and sleet => sleet
-        7 => 4, //mixed snow and sleet => sleet
-        8 => //freezing drizzle
-        9 => //drizzle
-        10 => //freezing rain
+        0 => 5, //tornado => wind
+        1 => 5, //tropical storm => wind
+        2 => 5, //hurricane => wind
+        3 => 10, //severe thunderstorms => thunder
+        4 => 10, //thunderstorms => thunder
+        5 => 11, //mixed rain and snow => rain-snow
+        6 => 12, //mixed rain and sleet => rain-sleet
+        7 => 13, //mixed snow and sleet => snow-sleet
+        8 => 2, //freezing drizzle => rain
+        9 => 2, //drizzle => rain
+        10 => 2, //freezing rain => rain
         11 => 2, //showers => rain
         12 => 2, //showers => rain
         13 => 3, //snow flurries => snow
-        14 => //light snow showers
-        15 => //blowing snow
+        14 => 3, //light snow showers => snow
+        15 => 3, //blowing snow => snow
         16 => 3, //snow => snow
-        17 => //hail
+        17 => 4, //hail => sleet
         18 => 4, //sleet => sleet
-        19 => //dust
+        19 => 6, //dust => fog
         20 => 6, //foggy => fog
-        21 => //haze
-        22 => //smoky
-        23 => //blustery
+        21 => 6, //haze => fog
+        22 => 6, //smoky => fog
+        23 => 5, //blustery => wind
         24 => 5, //windy => wind
-        25 => //cold
-        26 => 8, //cloudy => partly-cloudy-day
+        25 => 14, //cold => cold
+        26 => 7, //cloudy => cloudy
         27 => 9, //mostly cloudy (night) => partly-cloudy-night
         28 => 8, //mostly cloudy (day) => partly-cloudy-day
         29 => 9, //partly cloudy (night) => partly-cloudy-night
@@ -156,20 +142,20 @@ $app->get('/weather', function(Application $app, Request $request) {
         32 => 0, //sunny => clear-day
         33 => 1, //fair (night) => clear-night
         34 => 0, //fair (day) => clear-day
-        35 => //mixed rain and hail
-        36 => //hot
-        37 => //isolated thunderstorms
-        38 => //scattered thunderstorms
-        39 => //scattered thunderstorms
-        40 => //scattered showers
+        35 => 12, //mixed rain and hail => rain-sleet
+        36 => 15, //hot => hot
+        37 => 10, //isolated thunderstorms => thunder
+        38 => 10, //scattered thunderstorms => thunder
+        39 => 10, //scattered thunderstorms => thunder
+        40 => 2, //scattered showers => rain
         41 => 3, //heavy snow => snow
-        42 => //scattered snow showers
-        43 => //heavy snow
+        42 => 3, //scattered snow showers => snow
+        43 => 3, //heavy snow => snow
         44 => 8, //partly cloudy => partly-cloudy-day
-        45 => //thundershowers
-        46 => //snow showers
-        47 => //isolated thundershowers
-        3200 => 99 //not available
+        45 => 10, //thundershowers => thunder
+        46 => 3, //snow showers => snow
+        47 => 10, //isolated thundershowers => thunder
+        3200 => 16 //not available
     );
 
     $data = array();
@@ -183,7 +169,6 @@ $app->get('/weather', function(Application $app, Request $request) {
     $response->headers->set('Content-Type', 'application/json');
 
     return $response;
-    */
 });
 
 $app->post('/register', function(Application $app, Request $request) {
