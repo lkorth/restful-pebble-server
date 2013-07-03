@@ -160,7 +160,7 @@ $app->post('/weather', function(Application $app) {
 
     $data = array();
 
-    $data[1] = array('b', $icons[$condition[0]['code']]);
+    $data[1] = array('b', $icons[(int) $condition[0]['code']]);
     $data[2] = array('s', round($condition[0]['temp']));
 
     $response = new Response();
