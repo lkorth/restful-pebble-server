@@ -140,8 +140,8 @@ $app->post('/weather', function(Application $app) {
         30 => 8, //partly cloudy (day) => partly-cloudy-day
         31 => 1, //clear (night) => clear-night
         32 => 0, //sunny => clear-day
-        33 => 1, //fair (night) => clear-night
-        34 => 0, //fair (day) => clear-day
+        33 => 9, //fair (night) => partly-cloudy-night
+        34 => 8, //fair (day) => partly-cloudy-day
         35 => 12, //mixed rain and hail => rain-sleet
         36 => 15, //hot => hot
         37 => 10, //isolated thunderstorms => thunder
