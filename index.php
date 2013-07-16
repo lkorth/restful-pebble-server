@@ -168,10 +168,7 @@ $app->post('/weather', function(Application $app) {
     $data[1] = array('b', $icons[(int) $condition[0]['code']]);
     $data[2] = array('s', round($condition[0]['temp']));
 
-    return $app->json($data, 200, array(
-        'Content-Type' => 'application/json',
-        'Cache-Control' => 'max-age=1680'
-    ));
+    return $app->json($data);
 });
 
 $app->post('/register', function(Application $app, Request $request) {
