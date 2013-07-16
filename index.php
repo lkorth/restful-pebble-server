@@ -49,9 +49,14 @@ $app->get('/watchfaces', function(Application $app) {
 			</div>
 		</a>
 
-		<a href="http://builds.cloudpebble.net/9/5/9519a01531134e73b03cf1f33db58575/watchface.pbw">
+		<a href="http://builds.cloudpebble.net/2/8/28e616a40416495caf6150059156c2d9/watchface.pbw">
 			<div class="cell">
-				<li style="background: url('/pebble/assets/roboto-weather.jpg') no-repeat center left">Roboto Weather<br>by: Zone-MR</li>
+				<li style="background: url('/pebble/assets/roboto-weather.jpg') no-repeat center left">Roboto Weather (Celsius - Yahoo Weather Mod)<br>by: Zone-MR</li>
+			</div>
+		</a>
+		<a href="http://builds.cloudpebble.net/5/2/52e25b48e60a47259a9e4a3713570066/watchface.pbw">
+			<div class="cell">
+				<li style="background: url('/pebble/assets/roboto-weather.jpg') no-repeat center left">Roboto Weather (Fahrenheit - Yahoo Weather Mod)<br>by: Zone-MR</li>
 			</div>
 		</a>
 
