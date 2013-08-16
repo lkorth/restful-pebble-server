@@ -168,7 +168,14 @@ $app->post('/weather', function(Application $app) {
     $data[1] = array('b', $icons[(int) $condition[0]['code']]);
     $data[2] = array('s', round($condition[0]['temp']));
 
-    return $app->json($data);
+    return $app->json($data, 200, array(
+        'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+        'Last-Modified' => gmdate("D, d M Y H:i:s") . " GMT",
+        'Cache-Control' => 'no-store, no-cache, must-revalidate',
+        'Cache-Control', 'post-check=0, pre-check=0',
+        'Pragma' => 'no-cache',
+        'ETag' => md5(json_encode($data))
+    ));
 });
 
 $app->post('/register', function(Application $app, Request $request) {
