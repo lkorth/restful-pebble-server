@@ -60,12 +60,12 @@ $app->get('/watchfaces', function(Application $app) {
 			</div>
 		</a>
 
-		<a href="http://www.mypebblefaces.com/download.php?fID=3735&version=1.72&uID=3263&link=1">
+		<a href="http://www.mypebblefaces.com/download_app?cID=2905">
 			<div class="cell">
 				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura<br>by: Niknam</li>
 			</div>
 		</a>
-		<a href="http://www.mypebblefaces.com/download.php?fID=3777&version=1.72&uID=3263&link=2&sub=1">
+		<a href="http://www.mypebblefaces.com/download_app?cID=3822">
 			<div class="cell">
 				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura (no vibration alert)<br>by: Niknam</li>
 			</div>
