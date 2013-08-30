@@ -43,7 +43,7 @@ $app = new Application();
 
 // default route
 $app->get('/', function(Application $app) {
-    trackHit('/', 'Root redirect');
+    trackHit('/pebble/', 'Root redirect');
     return $app->redirect('http://lukekorth.com/');
 });
 
@@ -52,7 +52,7 @@ $app->error(function (\Exception $e, $code) {
 });
 
 $app->get('/watchfaces', function() {
-    trackHit('/watchfaces', 'httpebble Watchfaces');
+    trackHit('/pebble/watchfaces', 'httpebble Watchfaces');
 
     $html = <<<EOD
 <!doctype html>
@@ -192,7 +192,7 @@ $app->post('/weather', function(Application $app) {
     $data[1] = array('b', $icons[(int) $condition[0]['code']]);
     $data[2] = array('s', round($condition[0]['temp']));
 
-    trackHit('/weather', 'Yahoo Weather Endpoint');
+    trackHit('/pebble/weather', 'Yahoo Weather Endpoint');
 
     return $app->json($data, 200, array(
         'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
@@ -226,7 +226,7 @@ $app->post('/register', function(Application $app, Request $request) {
 
         DB::store($user);
 
-        trackHit('/register', 'Pebble Connect GCM Register');
+        trackHit('/pebble/register', 'Pebble Connect GCM Register');
 
         return new Response();
     }
@@ -270,7 +270,7 @@ $app->post('/send', function(Application $app, Request $request) {
             $app->abort(500);
         }
 
-        trackHit('/send', 'RESTful API');
+        trackHit('/pebble/send', 'RESTful API');
 
         return new Response();
     } else {
@@ -346,7 +346,7 @@ $app->post('/xmlrpc.php', function() {
                 $user->ifttt = $user->ifttt + 1;
                 DB::store($user);
 
-                trackHit('/xmlrpc.php', 'IFTTT Endpoint');
+                trackHit('/pebble/xmlrpc.php', 'IFTTT Endpoint');
 
                 return success('<string>200</string>');
             } catch (\InvalidArgumentException $e) {
