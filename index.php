@@ -2,10 +2,12 @@
 
 require_once('../../config.php');
 require_once('vendor/autoload.php');
+require_once('vendor/php-ga/autoload.php');
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use UnitedPrototype\GoogleAnalytics;
 
 class DB extends RedBean_Facade{};
 function initDB() {
@@ -14,10 +16,32 @@ function initDB() {
     DB::freeze();
 }
 
+function trackHit($url, $title) {
+    // Initilize GA Tracker
+    $tracker = new GoogleAnalytics\Tracker('UA-43643039-1', 'ofkorth.net');
+
+    // Assemble Visitor information
+    $visitor = new GoogleAnalytics\Visitor();
+    $visitor->setIpAddress($_SERVER['REMOTE_ADDR']);
+    $visitor->setUserAgent($_SERVER['HTTP_USER_AGENT']);
+    $visitor->setScreenResolution('1024x768'); // Default since we can't detect
+
+    // Assemble Session information
+    $session = new GoogleAnalytics\Session();
+
+    // Assemble Page information
+    $page = new GoogleAnalytics\Page($url);
+    $page->setTitle($title);
+
+    // Track page view
+    $tracker->trackPageview($page, $session, $visitor);
+}
+
 $app = new Application();
 
 // default route
 $app->get('/', function(Application $app) {
+    trackHit('/', 'Root redirect');
     return $app->redirect('http://lukekorth.com/');
 });
 
@@ -25,7 +49,9 @@ $app->error(function (\Exception $e, $code) {
     return new Response();
 });
 
-$app->get('/watchfaces', function(Application $app) {
+$app->get('/watchfaces', function() {
+    trackHit('/watchfaces', 'httpebble Watchfaces');
+
     $html = <<<EOD
 <!doctype html>
 <!-- design from http://pebble-static.s3.amazonaws.com/watchfaces/index.html -->
@@ -164,6 +190,8 @@ $app->post('/weather', function(Application $app) {
     $data[1] = array('b', $icons[(int) $condition[0]['code']]);
     $data[2] = array('s', round($condition[0]['temp']));
 
+    trackHit('/weather', 'Yahoo Weather Endpoint');
+
     return $app->json($data, 200, array(
         'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
         'Last-Modified' => gmdate("D, d M Y H:i:s") . " GMT",
@@ -195,6 +223,8 @@ $app->post('/register', function(Application $app, Request $request) {
         $user->gcmid = $data['gcmId'];
 
         DB::store($user);
+
+        trackHit('/register', 'Pebble Connect GCM Register');
 
         return new Response();
     }
@@ -238,13 +268,15 @@ $app->post('/send', function(Application $app, Request $request) {
             $app->abort(500);
         }
 
+        trackHit('/send', 'RESTful API');
+
         return new Response();
     } else {
         $app->abort(400);
     }
 });
 
-$app->post('/xmlrpc.php', function(Application $app) {
+$app->post('/xmlrpc.php', function() {
     initDB();
 
 	$xml = simplexml_load_string(file_get_contents('php://input'));
@@ -311,6 +343,8 @@ $app->post('/xmlrpc.php', function(Application $app) {
 
                 $user->ifttt = $user->ifttt + 1;
                 DB::store($user);
+
+                trackHit('/xmlrpc.php', 'IFTTT Endpoint');
 
                 return success('<string>200</string>');
             } catch (\InvalidArgumentException $e) {
