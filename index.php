@@ -20,7 +20,9 @@ function initDB() {
 
 function trackHit($url, $title) {
     // Initilize GA Tracker
-    $tracker = new GoogleAnalytics\Tracker('UA-43643039-1', 'ofkorth.net');
+    $config = new GoogleAnalytics\Config();
+    $config->setAnonymizeIpAddresses(true);
+    $tracker = new GoogleAnalytics\Tracker('MO-43643039-1', 'ofkorth.net', $config);
 
     // Assemble Visitor information
     $visitor = new GoogleAnalytics\Visitor();
