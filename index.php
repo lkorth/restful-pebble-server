@@ -24,10 +24,14 @@ function trackHit($url, $title) {
     $config->setAnonymizeIpAddresses(true);
     $tracker = new GoogleAnalytics\Tracker('MO-43643039-1', 'ofkorth.net', $config);
 
+    $uas = '';
+    if(isset($_SERVER['HTTP_USER_AGENT']))
+        $uas = $_SERVER['HTTP_USER_AGENT'];
+
     // Assemble Visitor information
     $visitor = new GoogleAnalytics\Visitor();
     $visitor->setIpAddress($_SERVER['REMOTE_ADDR']);
-    $visitor->setUserAgent($_SERVER['HTTP_USER_AGENT']);
+    $visitor->setUserAgent($uas);
     $visitor->setScreenResolution('1024x768'); // Default since we can't detect
 
     // Assemble Session information
