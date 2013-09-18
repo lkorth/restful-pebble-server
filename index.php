@@ -127,7 +127,11 @@ $app->post('/weather', function(Application $app) {
     if(!$success) {
         $flickrResponse = get_data('http://api.flickr.com/services/rest/?method=flickr.places.findByLatLon&format=json&api_key=' . FLICKR_KEY . '&lat=' . $lat . '&lon=' . $long);
         $flickrResponse = json_decode(substr($flickrResponse, 14, strlen($flickrResponse) - 15), true);
-        $woeid = $flickrResponse['places']['place'][0]['woeid'];
+		
+		if(isset($flickrResponse['places']['place'][0]['woeid']))
+			$woeid = $flickrResponse['places']['place'][0]['woeid'];
+		else
+			return $app->abort(500);
 
         apc_store("$lat$long", $woeid);
     }
