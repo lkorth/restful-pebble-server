@@ -126,7 +126,7 @@ $app->post('/weather', function(Application $app) {
     $units = $payload[3];
 
     $success = false;
-    $woeid = apc_fetch("$lat$long", $success);
+    $woeid = apc_fetch(md5($payload[1] . $payload[2] . ''), $success);
 
     if(!$success) {
         $flickrResponse = get_data('http://api.flickr.com/services/rest/?method=flickr.places.findByLatLon&format=json&api_key=' . FLICKR_KEY . '&lat=' . $lat . '&lon=' . $long);
@@ -137,7 +137,105 @@ $app->post('/weather', function(Application $app) {
 		else
 			return $app->abort(500);
 
-        apc_store("$lat$long", $woeid);
+        apc_store(md5($payload[1] . $payload[2] . ''), $woeid);
+    }
+
+    $xml = simplexml_load_file('http://weather.yahooapis.com/forecastrss?w=' . $woeid . '&u=' . $units);
+    $xml->registerXPathNamespace('yweather', 'http://xml.weather.yahoo.com/ns/rss/1.0');
+    $condition = $xml->channel->item->xpath('yweather:condition');
+
+    // yahoo code => watch face icon id // yahoo condition => watch face condition
+    $icons = array(
+        0 => 5, //tornado => wind
+        1 => 5, //tropical storm => wind
+        2 => 5, //hurricane => wind
+        3 => 10, //severe thunderstorms => thunder
+        4 => 10, //thunderstorms => thunder
+        5 => 11, //mixed rain and snow => rain-snow
+        6 => 12, //mixed rain and sleet => rain-sleet
+        7 => 13, //mixed snow and sleet => snow-sleet
+        8 => 2, //freezing drizzle => rain
+        9 => 2, //drizzle => rain
+        10 => 2, //freezing rain => rain
+        11 => 2, //showers => rain
+        12 => 2, //showers => rain
+        13 => 3, //snow flurries => snow
+        14 => 3, //light snow showers => snow
+        15 => 3, //blowing snow => snow
+        16 => 3, //snow => snow
+        17 => 4, //hail => sleet
+        18 => 4, //sleet => sleet
+        19 => 6, //dust => fog
+        20 => 6, //foggy => fog
+        21 => 6, //haze => fog
+        22 => 6, //smoky => fog
+        23 => 5, //blustery => wind
+        24 => 5, //windy => wind
+        25 => 14, //cold => cold
+        26 => 7, //cloudy => cloudy
+        27 => 9, //mostly cloudy (night) => partly-cloudy-night
+        28 => 8, //mostly cloudy (day) => partly-cloudy-day
+        29 => 9, //partly cloudy (night) => partly-cloudy-night
+        30 => 8, //partly cloudy (day) => partly-cloudy-day
+        31 => 1, //clear (night) => clear-night
+        32 => 0, //sunny => clear-day
+        33 => 9, //fair (night) => partly-cloudy-night
+        34 => 8, //fair (day) => partly-cloudy-day
+        35 => 12, //mixed rain and hail => rain-sleet
+        36 => 15, //hot => hot
+        37 => 10, //isolated thunderstorms => thunder
+        38 => 10, //scattered thunderstorms => thunder
+        39 => 10, //scattered thunderstorms => thunder
+        40 => 2, //scattered showers => rain
+        41 => 3, //heavy snow => snow
+        42 => 3, //scattered snow showers => snow
+        43 => 3, //heavy snow => snow
+        44 => 8, //partly cloudy => partly-cloudy-day
+        45 => 10, //thundershowers => thunder
+        46 => 3, //snow showers => snow
+        47 => 10, //isolated thundershowers => thunder
+        3200 => 16 //not available
+    );
+
+    $data = array();
+
+    $data[1] = array('b', $icons[(int) $condition[0]['code']]);
+    $data[2] = array('s', round($condition[0]['temp']));
+
+    trackHit('/pebble/weather', 'Yahoo Weather Endpoint');
+
+    return $app->json($data, 200, array(
+        'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+        'Last-Modified' => gmdate("D, d M Y H:i:s") . " GMT",
+        'Cache-Control' => 'no-store, no-cache, must-revalidate',
+        'Cache-Control', 'post-check=0, pre-check=0',
+        'Pragma' => 'no-cache',
+        'ETag' => md5(json_encode($data))
+    ));
+});
+
+$app->post('/weather2', function(Application $app) {
+    $payload = json_decode(file_get_contents('php://input'), true);
+    if(!$payload)
+        return $app->abort(400);
+
+    $lat = round($payload[1] / 1000000, 3);
+    $long = round($payload[2] / 1000000, 3);
+    $units = $payload[3];
+
+    $success = false;
+    $woeid = apc_fetch(md5($payload[1] . $payload[2] . ''), $success);
+
+    if(!$success) {
+        $flickrResponse = get_data('http://api.flickr.com/services/rest/?method=flickr.places.findByLatLon&format=json&api_key=' . FLICKR_KEY . '&lat=' . $lat . '&lon=' . $long);
+        $flickrResponse = json_decode(substr($flickrResponse, 14, strlen($flickrResponse) - 15), true);
+
+        if(isset($flickrResponse['places']['place'][0]['woeid']))
+            $woeid = $flickrResponse['places']['place'][0]['woeid'];
+        else
+            return $app->abort(500);
+
+        apc_store(md5($payload[1] . $payload[2] . ''), $woeid);
     }
 
     $xml = simplexml_load_file('http://weather.yahooapis.com/forecastrss?w=' . $woeid . '&u=' . $units);
