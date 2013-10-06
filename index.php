@@ -154,8 +154,8 @@ $app->post('/weather', function(Application $app) {
         5 => 11, //mixed rain and snow => rain-snow
         6 => 12, //mixed rain and sleet => rain-sleet
         7 => 13, //mixed snow and sleet => snow-sleet
-        8 => 2, //freezing drizzle => rain
-        9 => 2, //drizzle => rain
+        8 => 16, //freezing drizzle => drizzle
+        9 => 16, //drizzle => drizzle
         10 => 2, //freezing rain => rain
         11 => 2, //showers => rain
         12 => 2, //showers => rain
@@ -194,7 +194,7 @@ $app->post('/weather', function(Application $app) {
         45 => 10, //thundershowers => thunder
         46 => 3, //snow showers => snow
         47 => 10, //isolated thundershowers => thunder
-        3200 => 16 //not available
+        3200 => 17 //not available
     );
 
     $data = array();
@@ -252,8 +252,8 @@ $app->post('/weather2', function(Application $app) {
         5 => 11, //mixed rain and snow => rain-snow
         6 => 12, //mixed rain and sleet => rain-sleet
         7 => 13, //mixed snow and sleet => snow-sleet
-        8 => 2, //freezing drizzle => rain
-        9 => 2, //drizzle => rain
+        8 => 16, //freezing drizzle => drizzle
+        9 => 16, //drizzle => drizzle
         10 => 2, //freezing rain => rain
         11 => 2, //showers => rain
         12 => 2, //showers => rain
@@ -292,7 +292,7 @@ $app->post('/weather2', function(Application $app) {
         45 => 10, //thundershowers => thunder
         46 => 3, //snow showers => snow
         47 => 10, //isolated thundershowers => thunder
-        3200 => 16 //not available
+        3200 => 17 //not available
     );
 
     $data = array();
