@@ -70,7 +70,7 @@ $app->get('/watchfaces', function() {
 <body>
 <div style="width: 320px; margin: 0 auto;">
 	<h1 id="watchfaces">Watchfaces</h1>
-	<h3 id="updated">Updated 6/16</h3>
+	<h3 id="updated">Updated 10/07</h3>
 	<br>
 	<ul id="watchface-list">
 	    <a href="http://builds.cloudpebble.net/d/9/d9f4525aa8124c4ba2f44ebfb14dafae/watchface.pbw">
@@ -90,14 +90,14 @@ $app->get('/watchfaces', function() {
 			</div>
 		</a>
 
-		<a href="http://www.mypebblefaces.com/download_app?cID=2905">
+		<a href="http://www.mypebblefaces.com/download_app?cID=2905&fID=3735&version=2&uID=3263">
 			<div class="cell">
-				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura<br>by: Niknam</li>
+				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura (Celsius)<br>by: Niknam</li>
 			</div>
 		</a>
-		<a href="http://www.mypebblefaces.com/download_app?cID=3822">
+		<a href="http://www.mypebblefaces.com/download_app?cID=5760&fID=6609&version=2&uID=3263">
 			<div class="cell">
-				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura (no vibration alert)<br>by: Niknam</li>
+				<li style="background: url('/pebble/assets/futura-weather.jpg') no-repeat center left">Futura (Fahrenheit)<br>by: Niknam</li>
 			</div>
 		</a>
 
