@@ -101,7 +101,7 @@ $app->get('/watchfaces', function() {
 			</div>
 		</a>
 
-		<a href="http://www.mypebblefaces.com/download.php?fID=3217&version=1.1.6&uID=1444&link=1">
+		<a href="http://www.mypebblefaces.com/download_app?cID=2746&fID=3217&version=1.1">
 			<div class="cell">
 				<li style="background: url('/pebble/assets/pebsona4.png') no-repeat center left">Pebsona 4<br>by: Spencer Johnson</li>
 			</div>
