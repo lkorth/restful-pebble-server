@@ -57,6 +57,11 @@ $app->error(function (\Exception $e, $code) {
     return new Response();
 });
 
+$app->get('/watchfaces', function(Application $app) {
+	trackHit('/watchfaces-goodbye-httpebble', 'Watchfaces - Goodbye httpebble');
+	return $app->redirect('http://lukekorth.com/blog/goodbye-httpebble/');
+});
+
 $app->post('/register', function(Application $app, Request $request) {
     initDB();
 
