@@ -53,61 +53,6 @@ $app->get('/', function(Application $app) {
     return $app->redirect('http://lukekorth.com/');
 });
 
-$app->get('/config', function() {
-    trackHit('/config', 'Two Factor Auth Config');
-
-    $html = <<<EOD
-<!doctype html>
-<html>
-    <head>
-        <script src="/pebble/assets/jquery-2.0.3.min.js"></script>
-    </head>
-    <body>
-        Name: <input type="text" id="name_1" name="name_1"><br>
-        Secret Key: <input type="text" id="key_1" name="key_1">
-
-        <br><br>
-
-        <button id="add">Add another key</button>
-
-        <br><br>
-
-        <button id="save">Save</button>
-
-        <script>
-            var number_of_keys = 1;
-
-            $('#add').click(function() {
-                number_of_keys++;
-
-                $('#key_' + (number_of_keys - 1)).after(
-                    '<br><br>' +
-                    'Name: <input type="text" id="name_' + number_of_keys + '" name="name_' + number_of_keys + '"><br>' +
-                    'Secret Key: <input type="text" id="key_' + number_of_keys + '" name="key_' + number_of_keys + '">'
-                );
-            });
-
-            $('#save').click(function() {
-                var data = { number: number_of_keys };
-
-                for(i = 1; i <= number_of_keys; i++) {
-                    data['name_' + i] = $('#name_' + i).val();
-                    data['key_' + i] = $('#key_' + i).val();
-                }
-
-                console.log('data: ' + JSON.stringify(data));
-
-                window.location.href = 'pebblejs:///close#' + encodeURIComponent(JSON.stringify(data));
-            });
-        </script>
-    </body>
-</html>
-
-EOD;
-
-    return new Response($html);
-});
-
 $app->error(function (\Exception $e, $code) {
     return new Response();
 });
