@@ -4,12 +4,10 @@ date_default_timezone_set('America/Los_Angeles');
 
 require_once('../../config.php');
 require_once('vendor/autoload.php');
-require_once('vendor/php-ga/autoload.php');
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use UnitedPrototype\GoogleAnalytics;
 
 class DB extends RedBean_Facade{};
 function initDB() {
@@ -18,38 +16,10 @@ function initDB() {
     DB::freeze();
 }
 
-function trackHit($url, $title) {
-    // Initilize GA Tracker
-    $config = new GoogleAnalytics\Config();
-    $config->setAnonymizeIpAddresses(true);
-    $tracker = new GoogleAnalytics\Tracker('MO-43643039-1', 'ofkorth.net', $config);
-
-    $uas = '';
-    if(isset($_SERVER['HTTP_USER_AGENT']))
-        $uas = $_SERVER['HTTP_USER_AGENT'];
-
-    // Assemble Visitor information
-    $visitor = new GoogleAnalytics\Visitor();
-    $visitor->setIpAddress($_SERVER['REMOTE_ADDR']);
-    $visitor->setUserAgent($uas);
-    $visitor->setScreenResolution('1024x768'); // Default since we can't detect
-
-    // Assemble Session information
-    $session = new GoogleAnalytics\Session();
-
-    // Assemble Page information
-    $page = new GoogleAnalytics\Page($url);
-    $page->setTitle($title);
-
-    // Track page view
-    $tracker->trackPageview($page, $session, $visitor);
-}
-
 $app = new Application();
 
 // default route
 $app->get('/', function(Application $app) {
-    trackHit('/pebble/', 'Root redirect');
     return $app->redirect('http://lukekorth.com/');
 });
 
@@ -58,7 +28,6 @@ $app->error(function (\Exception $e, $code) {
 });
 
 $app->get('/watchfaces', function(Application $app) {
-	trackHit('/watchfaces-goodbye-httpebble', 'Watchfaces - Goodbye httpebble');
 	return $app->redirect('http://lukekorth.com/blog/goodbye-httpebble/');
 });
 
@@ -83,8 +52,6 @@ $app->post('/register', function(Application $app, Request $request) {
         $user->gcmid = $data['gcmId'];
 
         DB::store($user);
-
-        trackHit('/pebble/register', 'Pebble Connect GCM Register');
 
         return new Response();
     }
@@ -127,8 +94,6 @@ $app->post('/send', function(Application $app, Request $request) {
         } catch (\Exception $e) {
             $app->abort(500);
         }
-
-        trackHit('/pebble/send', 'RESTful API');
 
         return new Response();
     } else {
@@ -203,8 +168,6 @@ $app->post('/xmlrpc.php', function() {
 
                 $user->ifttt = $user->ifttt + 1;
                 DB::store($user);
-
-                trackHit('/pebble/xmlrpc.php', 'IFTTT Endpoint');
 
                 return success('<string>200</string>');
             } catch (\InvalidArgumentException $e) {
